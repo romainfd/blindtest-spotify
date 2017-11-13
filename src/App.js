@@ -7,7 +7,8 @@ import './App.css';
 import Sound from 'react-sound';
 import Button from './Button';
 
-const apiToken = 'BQD5qgwXbzXqrMr_rqV8w_CDPPNAkvfWTOQclKlQx1kFMC9RYNhjLFAVgVcod8aspUtf9pmBWQZ9-xoGvZ4duG_LiPTzJM263WM-Jitz0KaB3zmGDv-4EA0ziD4gxSJQc4D7wKtxmB8V9LqwOdziVUerwAR0m1xc1gYFwRc';
+// A mettre à jour toutes les heures
+const apiToken = 'BQCnCpzlIl5pDoMFbN4Xo2cT2_ylegvIUQR4_hmzHtClWTcfHrjUBoFsozkxYNqq35X5f0XRWl399sSH05w7GP8J3Vy5uP6BlK0X2AKG_m2olLF1DTwPi45sRTMlgk7YLKKO4i1Dxn71xGPFdeaIspfa7I_Ky193SeBXMbc';
 var musicData = "";
 
 function shuffleArray(array) {
@@ -36,6 +37,7 @@ class App extends Component {
         this.state = {
             text: "Initialisation",
             tracks: {},
+            trackId: 0,
             songsLoaded: false
         };
     }
@@ -53,17 +55,26 @@ class App extends Component {
                 this.setState({
                 	text: "Musique récupérée",
                     tracks: data.items,
+                    trackId: data.items[0].track.id,
                     songsLoaded: true
                 });
                 musicData = data;
             })
     }
 
+    ckeckAnswer(track) {
+    	if (track.track.id == this.state.id) {
+    		swal('Bravo !', 'Tu as trouvé la bonne musique', 'success');
+    	} else {
+    		swal('Dommage', 'Ce n\'est malheureusement pas la bonne musique', 'error');
+    	}
+    }
+
     render() {
         if (this.state.songsLoaded) {
 			const track0 = this.state.tracks[0];
 			const track1 = this.state.tracks[1];
-        	
+
             return ( < div className = "App" >
                 < header className = "App-header" >
                 	< img src = { logo } className = "App-logo" alt = "logo" / >
@@ -77,8 +88,8 @@ class App extends Component {
                 	}
                 </div > 
                 < div className = "App-buttons" >
-                    <Button>{track0.track.name}</Button>
-            		<Button>{track1.track.name}</Button>
+                    <Button onClick={() => this.checkAnswer(track0)}>{track0.track.name}</Button>
+            		<Button onClick={() => this.checkAnswer(track1)}>{track1.track.name}</Button>
               	</div> 
             </div >
             );
